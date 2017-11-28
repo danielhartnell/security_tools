@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  db:
+    image: mongo
+  redis:
+    image: redis
+  web:
+    build: .
+    # Todo: Consider invoking app via shell script
+    command: python3 /autobounty/run.py
+    restart: always
+    volumes:
+      - .:/autobounty
+    ports:
+      - '5000:5000'
+    depends_on:
+      - db
+  worker:
+    build: .
+    # Todo: Consider invoking worker via shell script
+    command: >
+      celery worker
+      -A autobounty.scanner.tasks
+      -E --uid worker
+      -l WARNING
+      --pidfile /tmp/celerybeat.pid
+      -s /tmp/celerybeatchedule
+    volumes:
+      - .:/autobounty
+    depends_on:
+      - redis
+      - web
+  beat:
+    build: .
+    # Todo: Consider invoking worker via shell script
+    command: >
+      celery beat
+      -A autobounty.scanner.tasks
+      --uid worker
+      -l WARNING
+      --pidfile /tmp/celerybeat.pid
+      -s /tmp/celerybeatchedule
+      --max-interval=30
+    volumes:
+      - .:/autobounty
+    depends_on:
+      - redis
+      - web

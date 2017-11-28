@@ -113,3 +113,34 @@ I perform when looking for security bug bounties.
 	}
 }
 ```
+
+#### Ideas
+
+- Keep webpage source to track diffs over time
+- Extract new domains from CSP headers, HTML, etc.
+    - If the domain uses the same nameservers, high likelihood that it is good
+- Manipulate query parameters
+- Think about how I want to keep records up to date without huge backlog
+- Experiment with joining collections together
+- Introduce notifcations
+- Migrate the website to AWS and setup a CI/CD pipeline
+- Introduce testing
+- Sanitize user input
+- Add authentication
+- Create docker-compose setup with Redis, MongoDB and celery workers for test
+- Plan the introduction of new scans to make it easy
+- Aggregate response times and feature flags
+- Attempt to infer deployment schedule
+- Cleanup Sublist3r and subbrute integration
+- Make sure both do not use multiprocess
+- Setup an additional listener for host header injection
+    - Do what Burp does
+    - Set a unique host header for the transaction
+    - Listen for connections from reverse proxies or other nodes
+- Support uploading a list of domains for scanning
+- Create a configuration page
+- Configs should be scoped to one or more domains
+- Check for open redirects
+- Moderately passive, quick, opportunity to infer and identify behavior
+- Change content type and test for XXE
+-

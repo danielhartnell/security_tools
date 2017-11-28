@@ -1,12 +1,11 @@
 from flask import Flask
-from flask_pymongo import PyMongo
 
 web = Flask(__name__)
-
-web.config.update(MONGO_DBNAME='secmon')
-web.config.update(MONGO_URI='mongodb://localhost:27017/secmon')
-
-mongo = PyMongo(web)
+web.config.from_object('autobounty.conf.default_settings')
 
 from autobounty.website.dashboard import views
 from autobounty.website import api
+from autobounty.scanner import tasks
+
+# Todo: How do I deal with unused imports?
+# Is there a different way to accomplish this?

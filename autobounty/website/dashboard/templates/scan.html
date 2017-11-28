@@ -24,20 +24,22 @@
               <div class="mdl-cell mdl-cell--1-col"></div>
               <div class="mdl-cell mdl-cell--10-col">
                 <!-- Todo: resolve style width hack -->
+                  <h4>HTTP {{ domain.scan_results.response_code }}</h4>
+                    <p>Scan active: {{ active }}</p>
                 <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width:100%;">
                   <thead>
                     <tr>
-                      <th class="mdl-data-table__cell--non-numeric">Organization</th>
-                      <th class="mdl-data-table__cell--non-numeric">Domain (fqdn)</th>
+                        <th class="mdl-data-table__cell--non-numeric">Header</th>
+                        <th class="mdl-data-table__cell--non-numeric">Value</th>
                     </tr>
                   </thead>
                   <tbody id="domain-dashboard">
-                    {% for domain in domains %}
+                  {% for key,value in domain.scan_results.response_headers.items() %}
                     <tr>
-                        <td class="mdl-data-table__cell--non-numeric">{{ domain.org }}</td>
-                        <td class="mdl-data-table__cell--non-numeric">{{ domain.fqdn }}</td>
+                        <td class="mdl-data-table__cell--non-numeric">{{ key }}</td>
+                        <td class="mdl-data-table__cell--non-numeric">{{ value }}</td>
                     </tr>
-                    {% endfor %}
+                  {% endfor %}
                   </tbody>
                 </table>
               </div>
