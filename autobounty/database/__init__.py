@@ -3,19 +3,10 @@ from bson.objectid import ObjectId
 
 from autobounty.website.dashboard import web
 
-# Todo:
-# - Identify what's normal during __init__
-# - I suspect I will handle handle the DB connection here
-# - Ideally, I can make this somewhat modular to support changes
-# - Each method should probably be moved into a class
-# - All of these are specific to the dashboard / API / scanner
-# - A class like database.autobounty.update_scan() might be good
-# - Class should probably be in another file and instantiated here
-
-mongo = PyMongo(web)
+MONGO = PyMongo(web)
 
 def find_all_companies():
-    connection = mongo.db.domains
+    connection = MONGO.db.domains
     companies = []
     for company in connection.find():
         companies.append({
@@ -27,7 +18,7 @@ def find_all_companies():
     return companies
 
 def find_domains_by_id(id):
-    connection = mongo.db.domains
+    connection = MONGO.db.domains
     domain = []
     for e in connection.find({'_id': ObjectId(id)}):
         domain.append({
@@ -42,7 +33,7 @@ def find_domains_by_id(id):
     return domain[0]
 
 def update_scan(fqdn, scan_results):
-    connection = mongo.db.domains
+    connection = MONGO.db.domains
     connection.update_one({
         'fqdn': fqdn
     },{
@@ -52,7 +43,7 @@ def update_scan(fqdn, scan_results):
     }, upsert=True)
 
 def find_domains_by_company_id(id):
-    connection = mongo.db.domains
+    connection = MONGO.db.domains
     domains = []
     for domain in connection.find({'company_id': id}):
         domains.append({
@@ -62,28 +53,28 @@ def find_domains_by_company_id(id):
     return domains
 
 def find(query):
-    connection = mongo.db.domains
+    connection = MONGO.db.domains
     domain = connection.find(query)
     return domain
 
 def insert(data):
     query = {'fqdn': data['fqdn']}
-    mongo.db.domains.update(query, data, upsert=True)
+    MONGO.db.domains.update(query, data, upsert=True)
     return True
 
 def update(data):
     query = {'fqdn': data['fqdn']}
-    mongo.db.domains.update(query, data)
+    MONGO.db.domains.update(query, data)
     return True
 
 def delete(fqdn):
-    mongo.db.domains.delete_one( {'fqdn': fqdn} )
+    MONGO.db.domains.delete_one( {'fqdn': fqdn} )
     return True
 
 def count(company_name):
     domains = []
     query = {'company_name': company_name}
-    search = mongo.db.domains.find(query)
+    search = MONGO.db.domains.find(query)
     for result in search:
         domains.append(result)
     return len(domains)

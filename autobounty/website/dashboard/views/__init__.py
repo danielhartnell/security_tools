@@ -4,30 +4,16 @@ from flask import render_template
 from autobounty import database
 from autobounty.scanner import tasks
 from autobounty.website.dashboard import web
-
+from autobounty.database.company import Company
 
 @web.route('/')
 @web.route('/dashboard')
 def index():
-    companies = []
-    search = database.find_all_companies()
-    for result in search:
-        if result['last_scan'] is not int:
-            result['last_scan'] = 1
-        date = datetime.datetime.fromtimestamp(result['last_scan']).strftime('%Y-%m-%d')
-        companies.append({
-            'company_name': result['company_name'],
-            'company_id': result['company_id'],
-            'last_scan': date
-        })
-    unique_companies = list({v['company_name']: v for v in companies}.values())
-    for c in unique_companies:
-        c['matches'] = database.count(c['company_name'])
-
-    # Look at an ordered dictionary
-    # cache_property decorator
+    companies = Company.find_all(unique=True)
+    for company in companies:
+        company['matches'] = database.count(company['company_name'])
     return render_template('companies.html',
-                           companies=unique_companies,
+                           companies=companies,
                            title='Autobounty Dashboard')
 
 

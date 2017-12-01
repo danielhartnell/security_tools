@@ -1,16 +1,26 @@
+from autobounty.database import MONGO
+
 class Company:
-    def __init__(self, id=None, name=None, fqdn=None):
-        self.id = id,
+    def __init__(self, company_id=None, name=None, fqdn=None):
+        self.company_id = company_id,
         self.name = name,
         self.fqdn = fqdn
 
-    def find(self):
+    @staticmethod
+    def find(company_id):
         # Find one by company ID
         pass
 
-    def find_all(self):
+    @staticmethod
+    def find_all(unique=False):
         # Find all companies
-        pass
+        search = MONGO.db.domains.find()
+        companies = []
+        for company in search:
+            companies.append(company)
+        if unique is True:
+            companies = list({v['company_name']: v for v in companies}.values())
+        return companies
 
     def update(self):
         # Update x on n companies by y query
@@ -18,3 +28,4 @@ class Company:
 
     def save(self):
         pass
+
