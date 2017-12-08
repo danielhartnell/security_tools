@@ -5,6 +5,7 @@ from autobounty import database
 from autobounty.scanner import tasks
 from autobounty.website.dashboard import web
 from autobounty.database.company import Company
+from autobounty.database.domain import Domain
 
 
 @web.route('/')
