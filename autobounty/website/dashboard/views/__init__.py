@@ -55,14 +55,14 @@ def create_company():
     return jsonify({'create_company': 'success'})
 
 
-# @web.route('/domain/create', methods=['POST'])
-# def create_domain():
-#     domain = Domain(
-#         parent_id=request.json['parent_id'],
-#         fqdn=request.json['fqdn']
-#     )
-#     domain.save()
-#     return jsonify({'create_domain': 'success'})
+@web.route('/domain/create', methods=['POST'])
+def create_domain():
+    domain = Domain(
+        parent_id=request.json['parent_id'],
+        fqdn=request.json['fqdn']
+    )
+    domain.save()
+    return jsonify({'create_domain': 'success'})
 
 
 @web.route('/scan')
