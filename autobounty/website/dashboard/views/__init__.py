@@ -1,17 +1,18 @@
 import datetime
 
-from flask import render_template
+from flask import render_template, request, jsonify
 from autobounty import database
 from autobounty.scanner import tasks
 from autobounty.website.dashboard import web
 from autobounty.database.company import Company
+
 
 @web.route('/')
 @web.route('/dashboard')
 def index():
     companies = Company.find_all(unique=True)
     for company in companies:
-        company['matches'] = database.count(company['company_name'])
+        company['matches'] = database.count(company['name'])
     return render_template('companies.html',
                            companies=companies,
                            title='Autobounty Dashboard')
@@ -42,6 +43,26 @@ def scan_results_web(domain_id):
                            domain=domain,
                            active=scan_active,
                            title='Scan: {}'.format(fqdn))
+
+
+@web.route('/company/create', methods=['POST'])
+def create_company():
+    company = Company(
+        name=request.json['name'],
+        active=request.json['active']
+    )
+    company.save()
+    return jsonify({'create_company': 'success'})
+
+
+# @web.route('/domain/create', methods=['POST'])
+# def create_domain():
+#     domain = Domain(
+#         parent_id=request.json['parent_id'],
+#         fqdn=request.json['fqdn']
+#     )
+#     domain.save()
+#     return jsonify({'create_domain': 'success'})
 
 
 @web.route('/scan')

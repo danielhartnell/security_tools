@@ -1,31 +1,37 @@
 from autobounty.database import MONGO
 
+
 class Company:
-    def __init__(self, company_id=None, name=None, fqdn=None):
-        self.company_id = company_id,
-        self.name = name,
-        self.fqdn = fqdn
+    """
+    Company object in MongoDB:
+    {
+      "_id"   : ObjectId,
+      "name"  : "New Relic",
+      "active": "True"
+    }
+    """
+    def __init__(self, name=None, active=True):
+        self.name = name
+        self.active = active
+
+    def save(self):
+        query = {'name': self.name}
+        insert = {'name': self.name, 'active': self.active}
+        MONGO.db.companies.update(query, insert, upsert=True)
+        return True
 
     @staticmethod
-    def find(company_id):
+    def find():
         # Find one by company ID
         pass
 
     @staticmethod
     def find_all(unique=False):
         # Find all companies
-        search = MONGO.db.domains.find()
+        search = MONGO.db.companies.find()
         companies = []
         for company in search:
             companies.append(company)
         if unique is True:
-            companies = list({v['company_name']: v for v in companies}.values())
+            companies = list({v['name']: v for v in companies}.values())
         return companies
-
-    def update(self):
-        # Update x on n companies by y query
-        pass
-
-    def save(self):
-        pass
-

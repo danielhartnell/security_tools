@@ -5,17 +5,17 @@ from autobounty.website.dashboard import web
 
 MONGO = PyMongo(web)
 
-def find_all_companies():
-    connection = MONGO.db.domains
-    companies = []
-    for company in connection.find():
-        companies.append({
-            'company_id': company['company_id'],
-            'company_name': company['company_name'],
-            'fqdn': company['fqdn'],
-            'last_scan': company['last_scan']
-        })
-    return companies
+# def find_all_companies():
+#     connection = MONGO.db.domains
+#     companies = []
+#     for company in connection.find():
+#         companies.append({
+#             'company_id': company['company_id'],
+#             'company_name': company['company_name'],
+#             'fqdn': company['fqdn'],
+#             'last_scan': company['last_scan']
+#         })
+#     return companies
 
 def find_domains_by_id(id):
     connection = MONGO.db.domains
