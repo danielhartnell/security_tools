@@ -2,14 +2,6 @@ from autobounty.database import MONGO
 
 
 class Company:
-    """
-    Company object in MongoDB:
-    {
-      "_id"   : ObjectId,
-      "name"  : "New Relic",
-      "active": "True"
-    }
-    """
     def __init__(self, name=None, active=True):
         self.name = name
         self.active = active
@@ -19,11 +11,6 @@ class Company:
         insert = {'name': self.name, 'active': self.active}
         MONGO.db.companies.update(query, insert, upsert=True)
         return True
-
-    @staticmethod
-    def find():
-        # Find one by company ID
-        pass
 
     @staticmethod
     def find_all(unique=False):
