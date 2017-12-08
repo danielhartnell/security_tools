@@ -7,9 +7,13 @@ class Domain:
         self.fqdn = fqdn
 
     @staticmethod
-    def find(fqdn):
-        # Find one by company ID
-        pass
+    def find(parent_id):
+        # Find one by parent ID (company identifier)
+        search = MONGO.db.domains.find({'parent_id': {'$eq': parent_id}})
+        domains = []
+        for domain in search:
+            domains.append(domain)
+        return domains
 
     @staticmethod
     def find_all():
