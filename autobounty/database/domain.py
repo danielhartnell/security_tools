@@ -25,7 +25,6 @@ class Domain:
         # If company=True, scope to those results
         return domains
 
-
     def save(self):
         query = {'fqdn': self.fqdn}
         insert = {'parent_id': self.parent_id, 'fqdn': self.fqdn}

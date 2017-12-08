@@ -29,7 +29,6 @@
                 <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width:100%;">
                   <thead>
                     <tr>
-                        <th class="mdl-data-table__cell--non-numeric">Remove</th>
                         <th class="mdl-data-table__cell--non-numeric">Company name</th>
                         <th class="mdl-data-table__cell--non-numeric">Subdomains found</th>
                         <th class="mdl-data-table__cell--non-numeric">Rescan</th>
@@ -38,7 +37,6 @@
                   <tbody id="domain-dashboard">
                     {% for company in companies %}
                     <tr>
-                        <td class="mdl-data-table__cell--non-numeric"><label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2"><input type="checkbox" id="checkbox-2" class="mdl-checkbox__input"><span class="mdl-checkbox__label"></span></label></td>
                         <td class="mdl-data-table__cell--non-numeric"><a href="/{{ company._id }}">{{ company.name }}</a></td>
                         <td class="mdl-data-table__cell--non-numeric">{{ company.matches }}</td>
                         <td class="mdl-data-table__cell--non-numeric"><form action="/scan" method="get"><button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Scan now</button></form></td>

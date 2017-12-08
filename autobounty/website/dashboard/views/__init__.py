@@ -12,7 +12,9 @@ from autobounty.database.domain import Domain
 def index():
     companies = Company.find_all(unique=True)
     for company in companies:
-        company['matches'] = database.count(company['name'])
+        # ObjectId, _id, must be converted to type string
+        # Open to recommendations on improving this
+        company['matches'] = len(Domain.find(str(company['_id'])))
     return render_template('companies.html',
                            companies=companies,
                            title='Autobounty Dashboard')
