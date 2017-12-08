@@ -21,10 +21,6 @@ class Domain:
         # If company=True, scope to those results
         return domains
 
-    @staticmethod
-    def update():
-        # Update x on n companies by y query
-        pass
 
     def save(self):
         query = {'fqdn': self.fqdn}
