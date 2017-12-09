@@ -1,11 +1,19 @@
-import datetime
-
-from flask import render_template, request, jsonify
-from autobounty import database
+from flask import render_template, request
 from autobounty.scanner import tasks
 from autobounty.website.dashboard import web
 from autobounty.database.company import Company
 from autobounty.database.domain import Domain
+from wtforms import Form, BooleanField, StringField, validators
+
+
+class CreateCompanyForm(Form):
+    name = StringField('Name (example: "New Relic")', [validators.Length(min=2, max=25)])
+    active = BooleanField('Enable automated scanning (does not function today)', [validators.DataRequired()])
+
+
+class CreateDomainForm(Form):
+    fqdn = StringField('FQDN (example: "newrelic.com")', [validators.Length(min=2, max=100)])
+    parent_id = StringField('Parent ID (example: "5a224007abd70f12251dec69")', [validators.Length(min=2, max=64)])
 
 
 @web.route('/')
@@ -40,24 +48,34 @@ def scan_results_web(_id):
                            title='Scan: {}'.format(fqdn))
 
 
-@web.route('/company/create', methods=['POST'])
+@web.route('/company/create', methods=['GET', 'POST'])
 def create_company():
-    company = Company(
-        name=request.json['name'],
-        active=request.json['active']
-    )
-    company.save()
-    return jsonify({'create_company': 'success'})
+    form = CreateCompanyForm(request.form)
+    if request.method == 'POST' and form.validate():
+        company = Company(
+            name=form.name.data,
+            active=form.active.data
+        )
+        company.save()
+        return 'New company has been added'
+    return render_template('new_company.html',
+                           title='Create new company',
+                           form=form)
 
 
-@web.route('/domain/create', methods=['POST'])
+@web.route('/domain/create', methods=['GET', 'POST'])
 def create_domain():
-    domain = Domain(
-        parent_id=request.json['parent_id'],
-        fqdn=request.json['fqdn']
-    )
-    domain.save()
-    return jsonify({'create_domain': 'success'})
+    form = CreateDomainForm(request.form)
+    if request.method == 'POST' and form.validate():
+        domain = Domain(
+            fqdn=form.fqdn.data,
+            parent_id=form.parent_id.data
+        )
+        domain.save()
+        return 'New domain has been added'
+    return render_template('new_domain.html',
+                           title='Create new domain',
+                           form=form)
 
 
 @web.route('/scan')
