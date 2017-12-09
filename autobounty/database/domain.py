@@ -35,7 +35,6 @@ class Domain:
         domains = []
         for domain in search:
             domains.append(domain)
-        # If company=True, scope to those results
         return domains
 
     def save(self):
