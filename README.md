@@ -19,3 +19,8 @@ This is a Python application which depends on the following:
 - Celery
 
 I will also be taking advantage of some tools out there like subbrute and Sublist3r.
+
+### Setup
+
+You can use `docker-compose` to run this application. Clone this repository and
+run the command `docker-compose up` from the folder root.
