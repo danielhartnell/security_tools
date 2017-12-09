@@ -14,7 +14,8 @@ def index():
     for company in companies:
         # ObjectId, _id, must be converted to type string
         # Open to recommendations on improving this
-        company['matches'] = len(Domain.find(str(company['_id'])))
+        parent_id = str(company['_id'])
+        company['matches'] = len(Domain.find_by_parent_id(parent_id))
     return render_template('companies.html',
                            companies=companies,
                            title='Autobounty Dashboard')
@@ -22,25 +23,20 @@ def index():
 
 @web.route('/<parent_id>')
 def company_domains(parent_id):
-    domains = Domain.find(parent_id)
+    domains = Domain.find_by_parent_id(parent_id)
     return render_template('domains.html',
                            domains=domains,
                            title='{} domains'.format(parent_id))
 
 
-@web.route('/scan/<domain_id>')
-def scan_results_web(domain_id):
-    domain = database.find_domains_by_id(domain_id)
-    fqdn = domain['fqdn']
-    scan_active = 'null'
-    if domain['active'] is bool:
-        if domain['active'] is True:
-            scan_active = 'True'
-        else:
-            scan_active = 'False'
+@web.route('/scan/<_id>')
+def scan_results_web(_id):
+    domain = Domain.find_by_id(_id)
+    if len(domain) > 1:
+        return 'Error: too many results from DB query'
+    fqdn = domain[0]['fqdn']
     return render_template('scan.html',
-                           domain=domain,
-                           active=scan_active,
+                           domain=domain[0],
                            title='Scan: {}'.format(fqdn))
 
 
